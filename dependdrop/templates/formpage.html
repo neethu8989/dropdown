@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dependent Dropdown in Django</title>
+</head>
+<style>
+#myDIV {
+display:none;
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  background-color: lightblue;
+  margin-top: 20px;
+}
+#success-message {
+    display: none;
+}
+#success-message.show {
+    display: block;
+}
+.success_text {
+    text-align: center;
+    font-weight: bold;
+}
+</style>
+<body>
+<button onclick="myFunction()">OPEN FORM</button>
+
+<div id="myDIV">
+ <div class="user_card">
+     <h2>Person Form</h2>
+
+    <table>
+        <tr>
+    <td><label>Name:</label></td>
+    <td><input type="text" name="username" id="username" placeholder="your name" required></td>
+  </tr>
+    <tr>
+    <td><label for="email">Email:</label></td>
+    <td><input type="text" name="email" id="email" placeholder="your email" required></td>
+  </tr>
+  <tr>
+    <td><label for="dob">DOB:</label></td>
+    <td><input type="date" name="dob" id="dob" placeholder="DOB"></td>
+  </tr>
+  <tr>
+    <td><label >Age:</label></td>
+    <td><input type="number" name="number" id="number" placeholder="Age"></td>
+  </tr>
+  <tr>
+    <td><label>Gender:</label></td>
+    <td>Male: <input type="radio" name="gender" value="male">
+      Female: <input type="radio" name="gender" value="female">
+
+  </tr>
+  <tr>
+    <td><label for="phoneNumber">Phone Number:</label></td>
+    <td><input type="number" name="phoneNumber" id="phoneNumber"></td>
+  </tr>
+
+  <tr>
+    <td><label for="password">Password:</label></td>
+    <td><input type="password" name="password" id="password"></td>
+  </tr>
+  <tr>
+    <td><label for="address">Address:</label></td>
+    <td><textarea name="address" id="address" placeholder="Address"></textarea></td>
+  </tr>
+        <tr>
+    <td><label for="Account">Account Type</label></td>
+    <td>
+      <select id="account" name="account">
+        <option value="">Choose</option>
+        <option value="Savings">Savings</option>
+        <option value="Current">Current</option>
+      </select></td>
+  </tr>
+  <tr>
+    <td><label>Materials Required :</label></td>
+    <td>
+      <input type="checkbox" id="debit" name="materials[]" value="Debit Card">
+      <label for="debit">Debit Card</label>
+      <input type="checkbox" id="credit" name="materials[]" value="Credit Card">
+      <label for="credit">Credit Card</label>
+      <input type="checkbox" id="cheque" name="materials[]" value="Chequebook">
+      <label for="debit">Cheque Book</label>
+    </td>
+  </tr>
+
+    </table>
+             <form method="POST"  id="personForm"  data-branches-url="{% url 'ajax_load_cities' %}">
+        {% csrf_token %}
+       {{ form.as_p }}
+      <input type="submit" value="Submit">
+        {% for msg in messages %}
+				           <h6> {{msg}}</h6><br>
+        	                   {% endfor %}
+       <li><a class="links" href="logout">LOGOUT</a></li>
+
+
+</form>
+
+ </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_district").change(function () {
+        const url = $("#personForm").attr("data-branches-url");  // get the url of the `load_cities` view
+        const districtId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'district_id': districtId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_branch").html(data);  // replace the contents of the city input with the data that came from the server
+                /*
+
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (branch) {
+                    html_data += `<option value="${branch.id}">${branch.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_branch").html(html_data);
+
+                */
+            }
+        });
+
+    });
+</script>
+ <script>
+function myFunction() {
+  var x = document.getElementById("myDIV");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+};
+</script>
+
+</body>
+</html>
