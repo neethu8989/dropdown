@@ -109,16 +109,16 @@ display:none;
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $("#id_district").change(function () {
-        const url = $("#personForm").attr("data-branches-url");  // get the url of the `load_cities` view
-        const districtId = $(this).val();  // get the selected country ID from the HTML input
+        const url = $("#personForm").attr("data-branches-url"); 
+        const districtId = $(this).val();
 
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+        $.ajax({                       
+            url: url,                    
             data: {
-                'district_id': districtId       // add the country id to the GET parameters
+                'district_id': districtId       
             },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-                $("#id_branch").html(data);  // replace the contents of the city input with the data that came from the server
+            success: function (data) {   
+                $("#id_branch").html(data);  
                 /*
 
                 let html_data = '<option value="">---------</option>';
